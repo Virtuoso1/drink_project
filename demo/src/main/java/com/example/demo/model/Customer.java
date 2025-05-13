@@ -1,6 +1,4 @@
 package com.example.demo.model;
-import com.mysql.cj.xdevapi.InsertResult;
-
 import jakarta.persistence.*;
 
 @Entity

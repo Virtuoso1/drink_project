@@ -14,17 +14,17 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
-    @Bean
+    @Bean//admin credentials
     public UserDetailsService userDetailsService(PasswordEncoder encoder) {
     UserDetails admin = User.builder()
         .username("pow")
-        .password(encoder.encode("valet")) 
+        .password(encoder.encode("valet")) //Credentials to remain hardcoded until I create properties for them
         .roles("ADMIN")
         .build();
 
     return new InMemoryUserDetailsManager(admin);
 }
-    @Bean
+    @Bean//blocks admin requests without a user session and reroutes to login page
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
         .csrf(csrf -> csrf.disable())
@@ -32,7 +32,7 @@ public class SecurityConfig {
                         .requestMatchers("/admin/**").authenticated()
                         .anyRequest().permitAll()
         )
-        .formLogin(form -> form
+        .formLogin(form -> form//login handling for admin
                         .loginPage("/admin/login")
                         .defaultSuccessUrl("/admin/dashboard", true)
                         .permitAll()

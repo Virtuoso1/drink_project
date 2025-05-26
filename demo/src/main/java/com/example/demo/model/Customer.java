@@ -1,6 +1,6 @@
 package com.example.demo.model;
 import jakarta.persistence.*;
-
+//customer model -> Maps to customer table in database
 @Entity
 public class Customer {
     

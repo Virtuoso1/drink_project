@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 @Controller
 public class AuthController {
-
+//general routing
     @Autowired
     private CustomerRepository customerRepository;
 
@@ -26,7 +26,7 @@ public class AuthController {
         return "signup"; 
     }
 
-    @PostMapping("/signup")
+    @PostMapping("/signup")//signup handling
     public String processSignup(@ModelAttribute Customer customer) {
         String encodedPassword = passwordEncoder.encode(customer.getPassword());
         customer.setPassword(encodedPassword);
@@ -39,7 +39,7 @@ public class AuthController {
         return "login";
     }
     
-    @PostMapping("/login")
+    @PostMapping("/login")//login handling
     public String processLogin(@RequestParam String phone, @RequestParam String password, HttpSession session, Model model) {
         Customer customer = customerRepository.findByPhone(phone);
 

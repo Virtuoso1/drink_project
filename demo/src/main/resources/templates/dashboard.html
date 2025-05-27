@@ -8,7 +8,15 @@
 </head>
 <body>
     <h1>Welcome to the Dashboard</h1>
-    <p>This is a protected area only accessible after login.</p>
+    <h1 style="text-align: center;">Available Drinks</h1>
+    <div class="card-container">
+        <div class="card" th:each="drink : ${drinks}">
+            <img th:src="@{${drink.imageUrl}}" alt="Drink image">
+            <h3 th:text="${drink.name}">Drink Name</h3>
+            <p class="price" th:text="'Ksh ' + ${drink.price}">Price</p>
+            <p th:text="${drink.description}">Description</p>
+        </div>
+    </div>
     <a th:href="@{/logout}">Logout</a>
 </body>
 </html>

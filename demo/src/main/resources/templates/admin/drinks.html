@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Manage Drinks</title>
+    <link rel="stylesheet" th:href="@{/styles/main.css}" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+    <h1>Admin – Manage Drinks</h1>
+
+    <h2>Add New Drink</h2>
+    <form th:action="@{/admin/drinks/add}" th:object="${newDrink}" method="post" enctype="multipart/form-data">
+        <input type="text" th:field="*{name}" placeholder="Drink Name" required />
+        <input type="number" th:field="*{price}" placeholder="Price" step="0.01" required />
+        <textarea th:field="*{description}" placeholder="Description" required></textarea>
+        <input type="file" name="imageFile" accept="image/*" required />
+        <button type="submit">Add Drink</button>
+    </form>
+
+    <h2>Existing Drinks</h2>
+    <ul>
+        <li th:each="drink : ${drinks}">
+            <h3 th:text="${drink.name}"></h3>
+            <p th:text="'Price: $' + ${drink.price}"></p>
+            <p th:text="${drink.description}"></p>
+            <img th:src="${drink.imageUrl}" alt="Drink Image" width="150"/>
+        </li>
+    </ul>
+
+    <a th:href="@{/admin/dashboard}">Back to Dashboard</a>
+</body>
+</html>

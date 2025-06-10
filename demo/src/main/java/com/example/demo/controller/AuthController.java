@@ -1,13 +1,14 @@
 package com.example.demo.controller;
 
+import com.example.demo.model.BranchStock;
 import com.example.demo.model.Customer;
 import com.example.demo.model.Drink;
 import com.example.demo.repository.CustomerRepository;
 import com.example.demo.repository.DrinkRepository;
+import com.example.demo.repository.BranchStockRepository;
+
 import jakarta.servlet.http.HttpSession;
 import java.util.List;
-import org.springframework.web.bind.annotation.GetMapping;
-
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -56,19 +57,20 @@ public class AuthController {
         }
     }
     @Autowired
-    private DrinkRepository drinkRepository;
+    private BranchStockRepository branchStockRepository;
     @GetMapping("/dashboard")
     public String dashboard(HttpSession session, Model model) {
-        if (session.getAttribute("loggedInUser") == null) {
+        Customer customer = (Customer) session.getAttribute("loggedInUser");
+        if (customer == null) {
             return "redirect:/login";
         }
-       
-        List<Drink> drinks = drinkRepository.findAll();
-        model.addAttribute("drinks", drinks);
-      
+        int branchId = customer.getLocation();
+        List<BranchStock> stockList = branchStockRepository.findByBranchId(branchId);
 
+        model.addAttribute("stockList", stockList);
+        model.addAttribute("customer", customer);
         return "dashboard";
-    }
+}
 
 
     @GetMapping("/logout")

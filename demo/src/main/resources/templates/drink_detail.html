@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+  <title th:text="${drink.name}">Drink Detail</title>
+  <link rel="stylesheet" th:href="@{/styles/main.css}"/>
+
+
+
+</head>
+<body>
+  <h1 th:text="${drink.name}">Name</h1>
+  <img th:src="@{${drink.imageUrl}}" alt="Drink image" width="300"/>
+  <p th:text="${drink.description}">Description</p>
+  <p id="price" class="price" th:attr="data-price=${drink.price}" th:text="'Ksh ' + ${drink.price}">Price</p>
+
+  <form th:action="@{/cart/add}" method="post">
+    <input type="hidden" name="drinkId" th:value="${drink.drinkID}"/>
+    <label>
+      Quantity:
+      <input type="number" id="quantity" name="quantity" min="1" max="1000" value="1" oninput="updateTotal()" required/>
+    </label>
+        <p>Total: <span id="total" th:text="'Ksh '+${drink.price}"></span></p>
+    <input type="hidden" name="subtotal" id="subtotal" value="0" />
+
+    <button type="submit">Add to Cart</button>
+  </form>
+
+  <a th:href="@{/dashboard}">← Back to Dashboard</a>
+<script>
+function updateTotal() {
+  const priceElement = document.getElementById('price');
+  const price = parseFloat(priceElement.getAttribute('data-price'));
+  const quantity = parseInt(document.getElementById('quantity').value);
+  const total = price * quantity;
+  document.getElementById('total').textContent = isNaN(total) ? '' : 'Ksh ' + total.toFixed(2);
+}
+    </script>
+</body>
+</html>

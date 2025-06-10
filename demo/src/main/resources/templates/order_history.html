@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Order History</title>
+    <meta charset="UTF-8">
+    <style>
+        body { font-family: Arial; padding: 20px; }
+        h2 { margin-top: 40px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th, td { border: 1px solid #ddd; padding: 8px; }
+        th { background-color: #f4f4f4; }
+        .order-box { border: 1px solid #ccc; padding: 15px; margin-bottom: 30px; }
+    </style>
+</head>
+<body>
+    <h1>Your Order History</h1>
+
+    <div th:if="${#lists.isEmpty(orders)}">
+        <p>You have no previous orders.</p>
+    </div>
+
+    <div th:each="order : ${orders}" class="order-box">
+        <h2>Order ID: <span th:text="${order.orderID}"></span></h2>
+        <p>Order Date: <span th:text="${#temporals.format(order.order_date, 'dd MMM yyyy HH:mm')}"></span></p>
+        <p>Total Amount: Ksh <span th:text="${order.total_amount}">0.00</span></p>
+        <p>Status: <span th:text="${order.status}">Pending</span></p>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Drink Name</th>
+                    <th>Quantity</th>
+                    <th>Price (Ksh)</th>
+                    <th>Subtotal (Ksh)</th>
+                </tr>
+            </thead>
+            <tbody th:each="item : ${itemsMap[order.orderID.longValue()]}">
+                <tr>
+                    <td th:text="${item.drink.name}">Drink</td>
+                    <td th:text="${item.quantity}">0</td>
+                    <td th:text="${item.drink.price}">0.00</td>
+                    <td th:text="${item.subtotal}">0.00</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

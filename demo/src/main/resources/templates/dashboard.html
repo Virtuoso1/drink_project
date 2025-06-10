@@ -7,15 +7,17 @@
     <link rel="stylesheet" th:href="@{/styles/main.css}">
 </head>
 <body>
-    <h1>Welcome to the Dashboard</h1>
-    <h1 style="text-align: center;">Available Drinks</h1>
+    <div class="logo"><h3>Welcome [[${customer.name}]]</h3></div>
+    <h4 style="text-align: center;">Available Drinks in Your Branch: [[${customer.location}]]</h4>
     <div class="card-container">
-        <div class="card" th:each="drink : ${drinks}">
-            <img th:src="@{${drink.imageUrl}}" alt="Drink image">
-            <h3 th:text="${drink.name}">Drink Name</h3>
-            <p class="price" th:text="'Ksh ' + ${drink.price}">Price</p>
-            <p th:text="${drink.description}">Description</p>
-        </div>
+        <div class="card" th:if="${stock != null and stock.drink != null}" th:each="stock : ${stockList}">
+            <a th:href="@{/drink/{id}(id=${stock.drink.drinkID})}"  style="text-decoration:none;color:inherit;">
+            <img th:src="@{${stock.drink.imageUrl}}" alt="Drink image">
+            <h3 th:text="${stock.drink.name}">Drink Name</h3>
+            <p class="price" th:text="'Ksh ' + ${stock.drink.price}">Price</p>
+            <p th:text="${stock.drink.description}">Description</p>
+            <p th:text="'Available: ' + ${stock.stock} + ' units'">Stock Quantity</p>
+        </div></a>
     </div>
     <a th:href="@{/logout}">Logout</a>
 </body>

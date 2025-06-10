@@ -4,7 +4,6 @@ import com.example.demo.model.Order;
 import com.example.demo.model.BranchStock;
 import com.example.demo.model.Customer;
 import com.example.demo.model.OrderItem;
-import com.example.demo.repository.CustomerRepository;
 import com.example.demo.repository.DrinkRepository;
 import com.example.demo.repository.OrderItemRepository;
 import com.example.demo.repository.OrderRepository;

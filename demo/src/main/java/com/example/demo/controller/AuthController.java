@@ -2,9 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.model.BranchStock;
 import com.example.demo.model.Customer;
-import com.example.demo.model.Drink;
 import com.example.demo.repository.CustomerRepository;
-import com.example.demo.repository.DrinkRepository;
 import com.example.demo.repository.BranchStockRepository;
 
 import jakarta.servlet.http.HttpSession;

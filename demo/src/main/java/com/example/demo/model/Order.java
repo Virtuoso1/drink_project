@@ -9,7 +9,9 @@ import java.util.List;
 @Table(name = "Orders")
 public class Order {
 
-  @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Id 
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+@Column(name = "OrderID")
   private int orderID;
 
   private int custID;

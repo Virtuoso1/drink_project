@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Admin Stock View</title>
+</head>
+<body>
+  <h2>Branch Stock Overview</h2>
+
+  <table border="1">
+    <thead>
+      <tr>
+        <th>Branch ID</th>
+        <th>Drink Name</th>
+        <th>Stock</th>
+        <th>Threshold</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr th:each="s : ${stocks}">
+        <td th:text="${s.branchId}">Branch</td>
+        <td th:text="${s.drink.name}">Drink</td>
+        <td th:text="${s.stock}">0</td>
+        <td th:text="${s.threshold}">0</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>Add Stock</h3>
+  <form th:action="@{/admin/stock/add}" method="post">
+    <input type="number" name="branchId" placeholder="Branch ID" required />
+    <input type="number" name="drinkId" placeholder="Drink ID" required />
+    <input type="number" name="quantity" placeholder="Quantity" required />
+    <button type="submit">Add</button>
+  </form>
+
+  <h3 style="color:red;">Low Stock Alerts</h3>
+  <ul>
+    <li th:each="a : ${alerts}" th:text="'Branch ' + ${a.branchId} + ' - ' + ${a.drink.name} + ' is low on stock!'"></li>
+  </ul>
+</body>
+</html>

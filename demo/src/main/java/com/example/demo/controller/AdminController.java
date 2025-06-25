@@ -1,5 +1,5 @@
 package com.example.demo.controller;
-
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -73,7 +73,7 @@ public class AdminController {
     
     String fileName = UUID.randomUUID().toString() + "_" + imageFile.getOriginalFilename();
 
-    String uploadDir = "src/main/resources/static/images/";
+    String uploadDir = new File("uploads/images").getAbsolutePath();
 
     Path uploadPath = Paths.get(uploadDir);
     if (!Files.exists(uploadPath)) {
@@ -89,8 +89,6 @@ public class AdminController {
 
     return "redirect:/admin/drinks";
 }
-
-
 
     @GetMapping("/admin/login")
     public String adminLogin() {

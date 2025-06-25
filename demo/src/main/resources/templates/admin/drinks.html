@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Manage Drinks</title>
-    <link rel="stylesheet" th:href="@{/styles/main.css}" />
+    <link rel="stylesheet" th:href="@{/css/main.css}" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
@@ -21,7 +21,7 @@
     <ul>
         <li th:each="drink : ${drinks}">
             <h3 th:text="${drink.name}"></h3>
-            <p th:text="'Price: $' + ${drink.price}"></p>
+            <p th:text="'Price: Ksh.' + ${drink.price}"></p>
             <p th:text="${drink.description}"></p>
             <img th:src="${drink.imageUrl}" alt="Drink Image" width="150"/>
         </li>

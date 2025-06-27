@@ -4,20 +4,21 @@
   <title>Admin Stock View</title>
 </head>
 <body>
+  <a th:href="@{/admin/dashboard}">Back to dashboard</a><br>
   <h2>Branch Stock Overview</h2>
 
   <table border="1">
     <thead>
       <tr>
-        <th>Branch ID</th>
-        <th>Drink Name</th>
+        <th> Branch </th>
+        <th> Drink Name </th>
         <th>Stock</th>
         <th>Threshold</th>
       </tr>
     </thead>
     <tbody>
       <tr th:each="s : ${stocks}">
-        <td th:text="${s.branchId}">Branch</td>
+        <td th:text="${s.branch.name}">Branch</td>
         <td th:text="${s.drink.name}">Drink</td>
         <td th:text="${s.stock}">0</td>
         <td th:text="${s.threshold}">0</td>
@@ -26,11 +27,29 @@
   </table>
 
   <h3>Add Stock</h3>
-  <form th:action="@{/admin/stock/add}" method="post">
-    <input type="number" name="branchId" placeholder="Branch ID" required />
-    <input type="number" name="drinkId" placeholder="Drink ID" required />
-    <input type="number" name="quantity" placeholder="Quantity" required />
-    <button type="submit">Add</button>
+  <form th:action="@{/admin/stock/add}" th:object="${stock}" method="post">
+<label for="branchId">Branch:</label>
+    <select th:field="*{branchId}" required>
+        <option value="">-- Select Branch --</option>
+        <th:block th:each="branch : ${branches}">
+            <option th:value="${branch.branchId}" th:text="${branch.name}"></option>
+        </th:block>
+    </select>
+
+    <label for="drink">Drink:</label>
+    <select th:field="*{drink.drinkID}"  required>
+    <option value="">-- Select Drink --</option>
+    <th:block th:each="drink : ${drinks}">
+        <option th:value="${drink.drinkID}" th:text="${drink.name}"></option>
+    </th:block>
+    </select>
+
+
+    <label for="stock">Stock:</label>
+    <input type="number" th:field="*{stock}" required />
+
+    <button type="submit">Add Stock</button>
+   
   </form>
 
   <h3 style="color:red;">Low Stock Alerts</h3>

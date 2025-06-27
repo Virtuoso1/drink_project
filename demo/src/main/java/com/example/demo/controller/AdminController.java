@@ -41,39 +41,46 @@ public class AdminController {
     public String viewStock(Model model) {
     List<BranchStock> stockList = stockRepo.findAllByOrderByBranchIdAsc();
     List<BranchStock> lowStock = stockRepo.findStocksBelowThreshold();
+System.out.println("Branches: " + branchRepo.findAll());
 
     model.addAttribute("stocks", stockList);
     model.addAttribute("alerts", lowStock);
+    model.addAttribute("branches", branchRepo.findAll());
+    model.addAttribute("drinks", drinkRepo.findAll());
+    model.addAttribute("stock", new BranchStock());
     return "admin/admin_stock";
 }
-    @GetMapping("/add")
-    public String showAddStockForm(Model model) {
-        model.addAttribute("branches", branchRepo.findAll());
-        model.addAttribute("stock", new BranchStock());
-        return "admin/admin_add_stock";
+ 
+@PostMapping("/admin/stock/add")
+public String addStock(@ModelAttribute BranchStock stock) {
+    if (stock.getDrink() == null || stock.getDrink().getDrinkID() == null) {
+        return "redirect:/admin/stock?error=MissingDrink";
     }
+    stock.setThreshold(20);
+    Optional<Drink> drinkOpt = drinkRepo.findById(stock.getDrink().getDrinkID());
+    if (drinkOpt.isPresent()) {
+        Drink drink = drinkOpt.get();
+        Optional<BranchStock> existing = stockRepo.findByBranchIdAndDrink(stock.getBranchId(), drink);
 
-    @PostMapping("/add")
-    public String addStock(@ModelAttribute BranchStock stock) {
-        
-        Optional<BranchStock> existing = stockRepo.findByBranchIdAndDrink(stock.getBranchId(), stock.getDrink());
         if (existing.isPresent()) {
             BranchStock current = existing.get();
             current.setStock(current.getStock() + stock.getStock());
             stockRepo.save(current);
         } else {
+            stock.setDrink(drink);
             stockRepo.save(stock);
         }
-        return "redirect:/admin/stock";
     }
 
+    return "redirect:/admin/stock";
+}
 
     @PostMapping("/admin/drinks/add")
     public String addDrink(@ModelAttribute Drink drink,@RequestParam("imageFile") MultipartFile imageFile) throws IOException {
     
     String fileName = UUID.randomUUID().toString() + "_" + imageFile.getOriginalFilename();
 
-    String uploadDir = new File("uploads/images").getAbsolutePath();
+    String uploadDir = new File("src/main/resources/static/images").getAbsolutePath();
 
     Path uploadPath = Paths.get(uploadDir);
     if (!Files.exists(uploadPath)) {

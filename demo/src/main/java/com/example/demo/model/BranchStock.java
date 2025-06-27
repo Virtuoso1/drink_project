@@ -11,13 +11,17 @@ public class BranchStock {
     private Long id;
 
     @Column(name = "BranchID")
-    private int branchId;
+    private Integer branchId;
 
     @Column(name = "stock")
-    private int stock;
+    private Integer stock;
 
     @Column(name = "threshold")
-    private int threshold;
+    private Integer threshold;
+    
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "BranchID", referencedColumnName = "BranchID", insertable = false, updatable = false)
+    private Branch branch;
 
 
     @ManyToOne(fetch = FetchType.EAGER)
@@ -32,28 +36,35 @@ public class BranchStock {
         this.id = id;
     }
 
-    public int getBranchId() {
+    public Integer getBranchId() {
         return branchId;
     }
 
-    public void setBranchId(int branchId) {
+    public void setBranchId(Integer branchId) {
         this.branchId = branchId;
     }
 
+public Branch getBranch() {
+    return branch;
+}
 
-    public int getStock() {
+public void setBranch(Branch branch) {
+    this.branch = branch;
+}
+
+    public Integer getStock() {
         return stock;
     }
 
-    public void setStock(int stock) {
+    public void setStock(Integer stock) {
         this.stock = stock;
     }
 
-    public int getThreshold() {
+    public Integer getThreshold() {
         return threshold;
     }
 
-    public void setThreshold(int threshold) {
+    public void setThreshold(Integer threshold) {
         this.threshold = threshold;
     }
     public Drink getDrink() { return drink; }

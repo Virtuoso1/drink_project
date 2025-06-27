@@ -3,21 +3,23 @@ package com.example.demo.model;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "branch")
+@Table(name = "branches")
 public class Branch {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int branchId;
-
+    @Column(name = "BranchID")
+    private Integer branchId;
+    
+    @Column(name = "name")
     private String name;
 
 
-    public int getBranchId() {
+    public Integer getBranchId() {
         return branchId;
     }
 
-    public void setBranchId(int branchId) {
+    public void setBranchId(Integer branchId) {
         this.branchId = branchId;
     }
 

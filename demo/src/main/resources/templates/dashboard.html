@@ -8,7 +8,6 @@
 </head>
 <body>
     <div class="logo"><h3>Welcome [[${customer.name}]]</h3></div>
-    <h4 style="text-align: center;">Available Drinks in Your Branch: [[${customer.location}]]</h4>
     <div class="card-container">
         <div class="card" th:if="${stock != null and stock.drink != null}" th:each="stock : ${stockList}">
             <a th:href="@{/drink/{id}(id=${stock.drink.drinkID})}"  style="text-decoration:none;color:inherit;">

@@ -4,9 +4,14 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
+
 import org.springframework.web.multipart.MultipartFile;
 import java.nio.file.Path;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,10 +22,16 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.demo.repository.BranchStockRepository;
+import com.example.demo.repository.CustomerRepository;
 import com.example.demo.repository.BranchRepository;
 import com.example.demo.repository.DrinkRepository;
+import com.example.demo.repository.OrderRepository;
 import com.example.demo.model.Drink;
+import com.example.demo.model.Order;
+import com.example.demo.model.Branch;
 import com.example.demo.model.BranchStock;
+import com.example.demo.model.Customer;
+
 import org.springframework.ui.Model;
 
 @Controller
@@ -28,6 +39,10 @@ public class AdminController {
 //admin page handling
     @Autowired
     private DrinkRepository drinkRepository;
+@Autowired
+private CustomerRepository customerRepo;
+    @Autowired
+    private OrderRepository orderRepo;
     @Autowired private BranchStockRepository stockRepo;
     @Autowired private BranchRepository branchRepo;
     @Autowired private DrinkRepository drinkRepo;
@@ -37,6 +52,50 @@ public class AdminController {
         model.addAttribute("newDrink", new Drink());
         return "admin/drinks";
     }
+@GetMapping("/admin/reports")
+public String viewReports(Model model) {
+    List<Order> orders = orderRepo.findAll(); // We'll use raw orders to extract info
+
+    List<Map<String, String>> customerOrders = new ArrayList<>();
+
+    for (Order order : orders) {
+        Map<String, String> row = new HashMap<>();
+        
+        String customerName = customerRepo.findById((long) order.getCustID())
+                .map(Customer::getName).orElse("Unknown");
+
+       
+        String branchName = branchRepo.findById(order.getBranchID())
+                .map(Branch::getName).orElse("Unknown");
+
+        row.put("customer", customerName);
+        row.put("branch", branchName);
+        row.put("orderId", String.valueOf(order.getOrderID()));
+        row.put("date", order.getOrder_date().toString());
+        
+        double total = order.getTotal_amount() != null ? order.getTotal_amount() : 0.0;
+        row.put("amount", String.format("Ksh %.2f", total));
+        customerOrders.add(row);
+    }
+
+    
+    List<Object[]> salesTotals = orderRepo.totalSalesByBranch();
+    List<String[]> salesTotalsNamed = salesTotals.stream().map(obj -> {
+        Integer branchId = (Integer) obj[0];
+        Double total = (Double) obj[1];
+        String name = branchRepo.findById(branchId).map(b -> b.getName()).orElse("Unknown");
+        return new String[] { name, String.format("%.2f", total) };
+    }).collect(Collectors.toList());
+
+    Double totalRevenue = orderRepo.totalRevenue();
+
+    model.addAttribute("customerOrders", customerOrders);
+    model.addAttribute("salesTotals", salesTotalsNamed);
+    model.addAttribute("totalRevenue", totalRevenue);
+
+    return "admin/reports";
+}
+
 @GetMapping("/admin/stock")
     public String viewStock(Model model) {
     List<BranchStock> stockList = stockRepo.findAllByOrderByBranchIdAsc();

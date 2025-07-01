@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Admin Reports</title>
+    <meta charset="UTF-8">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        h2, h3 {
+            color: #2c3e50;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+        }
+        th, td {
+            padding: 10px;
+            border: 1px solid #ccc;
+        }
+        th {
+            background-color: #ecf0f1;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Admin Reports</h2>
+
+ <h3>1. Customer Orders</h3>
+<table>
+    <thead>
+        <tr>
+            <th>Order ID</th>
+            <th>Customer</th>
+            <th>Branch</th>
+            <th>Amount</th>
+            <th>Date</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr th:each="row : ${customerOrders}">
+            <td th:text="${row.orderId}">1</td>
+            <td th:text="${row.customer}">John Doe</td>
+            <td th:text="${row.branch}">Main Branch</td>
+            <td th:text="${row.amount}">Ksh 0.00</td>
+            <td th:text="${row.date}">2025-07-01</td>
+        </tr>
+    </tbody>
+</table>
+
+<h3>2. Sales Per Branch</h3>
+<table>
+    <thead>
+        <tr>
+            <th>Branch</th>
+            <th>Total Sales (Ksh)</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr th:each="s : ${salesTotals}">
+            <td th:text="${s[0]}">Branch Name</td>
+            <td th:text="${s[1]}">0.00</td>
+        </tr>
+    </tbody>
+</table>
+
+<p><strong>Total Revenue:</strong><span th:text="'Ksh ' + ${#numbers.formatDecimal(totalRevenue, 1, 2)}">Ksh 0.00</span>
+</p>
+<a th:href="@{/admin/dashboard}">Back to dashboard</a><br>
+
+</body>
+</html>
